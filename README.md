@@ -6,8 +6,22 @@ Android-first офлайн-приложение для показа локаль
 
 ## Статус
 
-Проект инициализирован. Реализация MVP описана в OpenSpec change
-`openspec/changes/mvp-subtitle-clock/`.
+Первый MVP реализован в OpenSpec change
+`openspec/changes/mvp-subtitle-clock/`. Приложение открывает локальные SRT и
+WebVTT, ведёт независимые часы и работает без сети.
+
+Поддерживается:
+
+- одновременное отображение нескольких overlapping cues;
+- play/pause и seek на `-10`, `-1`, `+1`, `+10` секунд;
+- переход к точному timestamp;
+- playback rate с шагом `0.001x` без скачка позиции;
+- независимый subtitle delay;
+- previous/next cue и nearby browser с `Sync here`;
+- изменение font size и OLED mode;
+- pause при уходе приложения в background;
+- сохранение позиции и настроек;
+- wake lock только на player screen.
 
 ## Стек
 
@@ -33,15 +47,31 @@ flutter pub get
 ## Запуск
 
 ```powershell
-flutter run
+flutter devices
+flutter run -d <device-id>
 ```
+
+На стартовом экране выберите UTF-8 файл `.srt` или `.vtt`. Android system
+document picker не требует широкого разрешения на доступ к хранилищу.
+
+Нажатие на timestamp открывает точный переход в формате `H:MM:SS.mmm`.
+Позиция фильма, subtitle delay и playback rate изменяются независимо.
+
+## Android build
+
+```powershell
+flutter build apk --debug
+flutter build apk --release
+```
+
+APK создаются в `build/app/outputs/flutter-apk/`.
 
 ## Проверки
 
 ```powershell
 dart format --output=none --set-exit-if-changed lib test
 flutter analyze
-flutter test
+flutter test --coverage
 openspec validate --all --strict --no-interactive
 ```
 
@@ -64,3 +94,5 @@ openspec validate --all --strict --no-interactive
 - [`02-architecture.md`](02-architecture.md) — архитектура
 - [`03-implementation-and-tests.md`](03-implementation-and-tests.md) — этапы и тест-план
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — процесс разработки
+- [`docs/dependencies.md`](docs/dependencies.md) — версии и лицензии зависимостей
+- [`docs/manual-test-report.md`](docs/manual-test-report.md) — Android test report

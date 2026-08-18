@@ -7,8 +7,12 @@ environment:
   sdk: ^3.13.0
 
 dependencies:
+  file_selector: 1.1.0
   flutter:
     sdk: flutter
+  shared_preferences: 2.5.5
+  subtitle: 0.2.0
+  wakelock_plus: 1.7.0
 
 dev_dependencies:
   flutter_test:
