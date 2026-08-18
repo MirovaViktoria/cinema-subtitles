@@ -63,6 +63,13 @@ fullscreen скрывает controls; один тап по области суб
 Нажатие на timestamp открывает точный переход в формате `H:MM:SS.mmm`.
 Позиция фильма, subtitle delay и playback rate изменяются независимо.
 
+## Скачать Android приложение
+
+Готовый APK публикуется на странице
+[GitHub Releases](https://github.com/MirovaViktoria/cinema-subtitles/releases).
+Для установки APK вне Google Play Android попросит разрешить установку из
+выбранного браузера или файлового менеджера.
+
 ## Android build
 
 ```powershell
@@ -71,6 +78,12 @@ flutter build apk --release
 ```
 
 APK создаются в `build/app/outputs/flutter-apk/`.
+
+Release APK должен подписываться постоянным private key. Скопируйте
+`android/key.properties.example` в `android/key.properties`, укажите пароли и
+поместите keystore в `android/app/`. Файлы signing credentials исключены из Git;
+их необходимо хранить в отдельном защищённом backup, иначе выпустить совместимое
+обновление приложения будет невозможно.
 
 ## Проверки
 
@@ -102,3 +115,4 @@ openspec validate --all --strict --no-interactive
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — процесс разработки
 - [`docs/dependencies.md`](docs/dependencies.md) — версии и лицензии зависимостей
 - [`docs/manual-test-report.md`](docs/manual-test-report.md) — Android test report
+- [`LICENSE`](LICENSE) — MIT license
