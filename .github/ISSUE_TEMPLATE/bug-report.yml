@@ -1,0 +1,35 @@
+name: Ошибка
+description: Сообщить о воспроизводимой ошибке
+title: "[Bug]: "
+labels: [bug]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Описание
+      description: Что произошло и чего вы ожидали?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Шаги воспроизведения
+      placeholder: |
+        1. Открыть...
+        2. Нажать...
+        3. Увидеть...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Версия приложения
+  - type: input
+    id: device
+    attributes:
+      label: Устройство и Android
+  - type: textarea
+    id: context
+    attributes:
+      label: Дополнительный контекст
+      description: Логи, скриншоты и безопасный пример файла субтитров.
