@@ -56,7 +56,7 @@ final class PlayerController extends ChangeNotifier {
   static const fontSizeStep = 2.0;
 
   final String _fileName;
-  final String _fileReference;
+  String? _fileReference;
   final SubtitleTimeline _timeline;
   final PlaybackClock _clock;
   final PlayerPreferencesStore _preferencesStore;
@@ -154,6 +154,11 @@ final class PlayerController extends ChangeNotifier {
     unawaited(persist());
   }
 
+  void clearRestorableFileReference() {
+    _fileReference = null;
+    unawaited(persist());
+  }
+
   void refresh() {
     if (_clock.isPlaying && _clock.position >= _timeline.duration) {
       _clock.pause();
@@ -173,7 +178,7 @@ final class PlayerController extends ChangeNotifier {
       fontSize: _fontSize,
       oledMode: _oledMode,
       lastFileReference: _fileReference,
-      lastFileName: _fileName,
+      lastFileName: _fileReference == null ? null : _fileName,
     );
     _saveQueue = _saveQueue.then((_) async {
       try {

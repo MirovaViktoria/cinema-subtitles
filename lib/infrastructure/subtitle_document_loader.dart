@@ -1,22 +1,22 @@
 import 'package:cinema_subtitles/domain/subtitle_timeline.dart';
+import 'package:cinema_subtitles/domain/subtitle_source.dart';
 import 'package:cinema_subtitles/infrastructure/subtitle_file_loader.dart';
 import 'package:cinema_subtitles/infrastructure/subtitle_parser.dart';
 
 final class SubtitleDocument {
-  const SubtitleDocument({
-    required this.name,
-    required this.reference,
-    required this.timeline,
-  });
+  const SubtitleDocument({required this.source, required this.timeline});
 
-  final String name;
-  final String reference;
+  final SubtitleSource source;
   final SubtitleTimeline timeline;
+
+  String get name => source.name;
+  String get reference => source.reference;
 }
 
 abstract interface class SubtitleDocumentSource {
   Future<SubtitleDocument?> pick();
   Future<SubtitleDocument> reopen(String reference);
+  Future<SubtitleDocument> parse(SubtitleSource source);
 }
 
 final class SubtitleDocumentLoader implements SubtitleDocumentSource {
@@ -28,23 +28,20 @@ final class SubtitleDocumentLoader implements SubtitleDocumentSource {
   @override
   Future<SubtitleDocument?> pick() async {
     final file = await _fileLoader.pick();
-    return file == null ? null : _parse(file);
+    return file == null ? null : parse(file);
   }
 
   @override
   Future<SubtitleDocument> reopen(String reference) async {
-    return _parse(await _fileLoader.reopen(reference));
+    return parse(await _fileLoader.reopen(reference));
   }
 
-  Future<SubtitleDocument> _parse(SubtitleFileContents file) async {
+  @override
+  Future<SubtitleDocument> parse(SubtitleSource source) async {
     final cues = await _parser.parse(
-      contents: file.contents,
-      format: file.format,
+      contents: SubtitleFileLoader.decodeUtf8(source.bytes),
+      format: source.format,
     );
-    return SubtitleDocument(
-      name: file.name,
-      reference: file.reference,
-      timeline: SubtitleTimeline(cues),
-    );
+    return SubtitleDocument(source: source, timeline: SubtitleTimeline(cues));
   }
 }

@@ -19,6 +19,8 @@ WebVTT, ведёт независимые часы и работает без с
 - независимый subtitle delay;
 - previous/next cue и nearby browser с `Sync here`;
 - изменение font size и OLED mode;
+- постоянное избранное с приватными offline-копиями SRT/WebVTT;
+- focus mode: скрытие controls и возврат одним тапом по subtitle area;
 - pause при уходе приложения в background;
 - сохранение позиции и настроек;
 - wake lock только на player screen.
@@ -53,6 +55,10 @@ flutter run -d <device-id>
 
 На стартовом экране выберите UTF-8 файл `.srt` или `.vtt`. Android system
 document picker не требует широкого разрешения на доступ к хранилищу.
+
+Звезда на player screen сохраняет приватную копию файла в избранное. Список на
+стартовом экране доступен после перезапуска и не зависит от picker cache. Кнопка
+fullscreen скрывает controls; один тап по области субтитров возвращает их.
 
 Нажатие на timestamp открывает точный переход в формате `H:MM:SS.mmm`.
 Позиция фильма, subtitle delay и playback rate изменяются независимо.

@@ -1,5 +1,5 @@
+import 'package:cinema_subtitles/domain/subtitle_source.dart';
 import 'package:cinema_subtitles/infrastructure/subtitle_file_loader.dart';
-import 'package:cinema_subtitles/infrastructure/subtitle_parser.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

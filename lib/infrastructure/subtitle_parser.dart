@@ -1,6 +1,5 @@
 import 'package:cinema_subtitles/domain/subtitle_cue.dart';
-
-enum SubtitleFormat { srt, webVtt }
+import 'package:cinema_subtitles/domain/subtitle_source.dart';
 
 abstract interface class SubtitleParser {
   Future<List<SubtitleCue>> parse({

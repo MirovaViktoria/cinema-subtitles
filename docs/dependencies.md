@@ -8,6 +8,8 @@
 | `file_selector` | 1.1.0 | BSD-3-Clause | Android system document picker |
 | `wakelock_plus` | 1.7.0 | BSD-3-Clause | Wake lock на player screen |
 | `shared_preferences` | 2.5.5 | BSD-3-Clause | Локальные настройки playback |
+| `path_provider` | 2.1.6 | BSD-3-Clause | Приватный application support directory для избранного |
+| `crypto` | 3.0.7 | BSD-3-Clause | SHA-256 идентификаторы копий субтитров |
 
 `subtitle` используется только через `SubtitlePackageAdapter`. Его
 `SubtitleController` не используется, потому что удаляет cues с одинаковым
@@ -17,3 +19,7 @@
 `file_selector` на Android копирует выбранный документ во временный app cache.
 Сохранённый `XFile.path` может стать недоступным после очистки cache; повторное
 открытие поэтому всегда обрабатывается как fallible operation.
+
+`path_provider` используется только infrastructure repository и не требует
+широких разрешений файловой системы. `crypto` вычисляет SHA-256 локально; данные
+не отправляются по сети.

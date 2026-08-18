@@ -1,3 +1,4 @@
+import 'package:cinema_subtitles/domain/subtitle_source.dart';
 import 'package:cinema_subtitles/infrastructure/subtitle_document_loader.dart';
 
 final class FakeSubtitleDocumentSource implements SubtitleDocumentSource {
@@ -24,5 +25,13 @@ final class FakeSubtitleDocumentSource implements SubtitleDocumentSource {
       throw currentError;
     }
     return document!;
+  }
+
+  @override
+  Future<SubtitleDocument> parse(SubtitleSource source) async {
+    if (error case final currentError?) {
+      throw currentError;
+    }
+    return SubtitleDocument(source: source, timeline: document!.timeline);
   }
 }

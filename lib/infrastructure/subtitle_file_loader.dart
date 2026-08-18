@@ -1,21 +1,7 @@
 import 'dart:convert';
 
-import 'package:cinema_subtitles/infrastructure/subtitle_parser.dart';
+import 'package:cinema_subtitles/domain/subtitle_source.dart';
 import 'package:file_selector/file_selector.dart';
-
-final class SubtitleFileContents {
-  const SubtitleFileContents({
-    required this.name,
-    required this.reference,
-    required this.contents,
-    required this.format,
-  });
-
-  final String name;
-  final String reference;
-  final String contents;
-  final SubtitleFormat format;
-}
 
 enum SubtitleFileFailureKind { unsupportedFormat, unreadable, encoding }
 
@@ -37,7 +23,7 @@ final class SubtitleFileLoader {
     mimeTypes: ['application/x-subrip', 'text/vtt', 'text/plain'],
   );
 
-  Future<SubtitleFileContents?> pick() async {
+  Future<SubtitleSource?> pick() async {
     final file = await openFile(acceptedTypeGroups: [_subtitleTypes]);
     if (file == null) {
       return null;
@@ -45,19 +31,19 @@ final class SubtitleFileLoader {
     return _read(file);
   }
 
-  Future<SubtitleFileContents> reopen(String reference) {
+  Future<SubtitleSource> reopen(String reference) {
     return _read(XFile(reference));
   }
 
-  Future<SubtitleFileContents> _read(XFile file) async {
+  Future<SubtitleSource> _read(XFile file) async {
     try {
       final bytes = await file.readAsBytes();
       final name = file.name;
       final contents = decodeUtf8(bytes);
-      return SubtitleFileContents(
+      return SubtitleSource(
         name: name,
         reference: file.path,
-        contents: contents,
+        bytes: bytes,
         format: detectFormat(name, contents: contents),
       );
     } on SubtitleFileException {

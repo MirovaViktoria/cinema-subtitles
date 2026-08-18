@@ -26,3 +26,30 @@
 
 Эти сценарии требуют реального фильма и субъективной проверки читаемости, поэтому
 не заменяются unit/widget tests или короткой device automation.
+
+## Favorites и focus mode
+
+Автоматическая проверка change `add-favorites-and-focus-mode`:
+
+- полный набор из 89 tests прошёл;
+- debug и release APK собраны;
+- release APK не запрашивает `INTERNET` или broad storage permissions;
+- repository tests покрывают private SRT/VTT copies, restart, SHA-256 deduplication,
+  atomic metadata recovery, cleanup queue, missing/damaged copies и disk failures;
+- widget tests покрывают add/open/remove, broken entry cleanup, focus hide/show,
+  multiple/long cues, неизменные rate/delay/position и compact Android width.
+
+Повторная ручная проверка выполнена на Samsung SM-S918B:
+
+- свежий debug APK установлен через ADB с сохранением app data;
+- реальный SRT добавлен в избранное и сохранён отдельной SHA-256 private copy;
+- исходный файл удалён из picker cache, после force-stop/restart запись осталась
+  на главном экране и успешно открылась из `files/favorites/`;
+- playback продолжился во время hide/show controls, после возврата сохранились
+  position `0:00:37.728`, rate `1.000x` и delay `+0.0s`;
+- device fixture в `0:00:16.000` одновременно показал длинный multiline cue и
+  два независимых overlapping cues с одинаковым start time;
+- при скрытых controls весь текст остался в полноэкранной subtitle area, а один
+  тап вернул меню на той же позиции;
+- временный device fixture удалён штатной командой Remove, пользовательская
+  private copy осталась нетронутой.

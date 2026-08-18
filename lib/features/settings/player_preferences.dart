@@ -25,6 +25,7 @@ final class PlayerPreferences {
     bool? oledMode,
     String? lastFileReference,
     String? lastFileName,
+    bool clearLastFile = false,
   }) {
     return PlayerPreferences(
       position: position ?? this.position,
@@ -32,8 +33,10 @@ final class PlayerPreferences {
       playbackRate: playbackRate ?? this.playbackRate,
       fontSize: fontSize ?? this.fontSize,
       oledMode: oledMode ?? this.oledMode,
-      lastFileReference: lastFileReference ?? this.lastFileReference,
-      lastFileName: lastFileName ?? this.lastFileName,
+      lastFileReference: clearLastFile
+          ? null
+          : lastFileReference ?? this.lastFileReference,
+      lastFileName: clearLastFile ? null : lastFileName ?? this.lastFileName,
     );
   }
 }

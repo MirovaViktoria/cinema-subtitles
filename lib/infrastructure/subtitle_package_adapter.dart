@@ -1,4 +1,5 @@
 import 'package:cinema_subtitles/domain/subtitle_cue.dart';
+import 'package:cinema_subtitles/domain/subtitle_source.dart';
 import 'package:cinema_subtitles/infrastructure/subtitle_parser.dart';
 import 'package:subtitle/subtitle.dart' as package;
 
