@@ -139,6 +139,7 @@ class _PlayerScreenState extends State<PlayerScreen>
                             : () => setState(() => _controlsVisible = true),
                         child: SubtitleView(
                           cues: state.activeCues,
+                          previousCue: state.previousCue,
                           preferredFontSize: state.fontSize,
                         ),
                       ),

@@ -93,6 +93,29 @@ void main() {
 
     expect(controller.state.position, const Duration(seconds: 20));
     expect(controller.state.activeCues, [delayedCue]);
+    expect(controller.state.previousCue, firstCue);
+  });
+
+  test('keeps one previous cue while new cues are active', () {
+    controller.seek(const Duration(seconds: 16));
+
+    expect(controller.state.activeCues, isEmpty);
+    expect(controller.state.previousCue, firstCue);
+
+    controller.seek(delayedCue.start);
+
+    expect(controller.state.activeCues, [delayedCue]);
+    expect(controller.state.previousCue, firstCue);
+
+    controller.seek(const Duration(seconds: 20));
+
+    expect(controller.state.activeCues, isEmpty);
+    expect(controller.state.previousCue, delayedCue);
+  });
+
+  test('does not display retained cues before the first cue', () {
+    expect(controller.state.activeCues, isEmpty);
+    expect(controller.state.previousCue, isNull);
   });
 
   test('previous, next and sync actions seek to cue starts', () {

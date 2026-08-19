@@ -71,6 +71,28 @@ void main() {
     expect(timeline.activeAt(const Duration(seconds: 12)), [a]);
   });
 
+  test('finds the latest ended cue during gaps and active cues', () {
+    final a = cue('A', 10, 15, 0);
+    final b = cue('B', 20, 25, 1);
+    final timeline = SubtitleTimeline([a, b]);
+
+    expect(timeline.latestEndedAt(const Duration(seconds: 9)), isNull);
+    expect(timeline.latestEndedAt(const Duration(seconds: 16)), a);
+    expect(timeline.activeAt(const Duration(seconds: 20)), [b]);
+    expect(timeline.latestEndedAt(const Duration(seconds: 20)), a);
+    expect(timeline.latestEndedAt(const Duration(seconds: 26)), b);
+  });
+
+  test('selects one latest ended cue after overlaps and shared end times', () {
+    final long = cue('Long', 10, 30, 0);
+    final nested = cue('Nested', 24, 27, 1);
+    final sameEnd = cue('Same end', 28, 30, 2);
+    final timeline = SubtitleTimeline([long, nested, sameEnd]);
+
+    expect(timeline.latestEndedAt(const Duration(seconds: 29)), nested);
+    expect(timeline.latestEndedAt(const Duration(seconds: 31)), sameEnd);
+  });
+
   test('navigates and returns nearby cues in timeline order', () {
     final cues = [
       cue('A', 5, 6, 0),

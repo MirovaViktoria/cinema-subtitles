@@ -201,6 +201,15 @@ Default cinema-oriented design:
 - very low brightness-friendly presentation
 - large centered subtitle area
 - controls that can be revealed without leaving the player
+- show one most recently ended cue in a distinct opaque cool-gray color
+- keep that previous cue visible during a gap and while new cues appear below it
+- animate cue changes with a subtle cross-fade
+- keep each visible cue in its current vertical slot when it becomes previous;
+  place the next cue in the other free slot instead of moving existing text
+
+The previous-cue color is visual only. Cue activity still uses the
+half-open `[start, end)` rule, and the subtitle area remains empty before the
+first cue begins.
 
 Recommended subtitle ordering:
 

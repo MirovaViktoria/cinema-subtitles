@@ -370,6 +370,14 @@ Render cue blocks independently with spacing between them.
 
 This allows one long cue to remain visible while shorter overlapping cues appear and disappear.
 
+Keep strict `activeCues` separate from `previousCue`. Resolve `previousCue` as
+the one most recently ended cue at the lookup timestamp, including while new
+cues are active. Render previous and active content in two alternating fixed
+slots. A cue retains its slot when it changes from active to previous and
+animates from white to an opaque cool-gray color; the next cue cross-fades into the other free slot.
+This prevents vertical jumps and duplicate animation. Derive cue selection from
+timeline timestamps while keeping slot assignment as presentation state.
+
 ## File Loading
 
 Use the platform file picker through `file_selector` or equivalent.

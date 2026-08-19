@@ -193,6 +193,7 @@ final class PlayerController extends ChangeNotifier {
   PlayerState _buildState() {
     final position = _clock.position;
     final lookupTime = position - _subtitleDelay;
+    final activeCues = _timeline.activeAt(lookupTime);
     return PlayerState(
       fileName: _fileName,
       isPlaying: _clock.isPlaying,
@@ -202,7 +203,8 @@ final class PlayerController extends ChangeNotifier {
       playbackRate: _clock.rate,
       fontSize: _fontSize,
       oledMode: _oledMode,
-      activeCues: List.unmodifiable(_timeline.activeAt(lookupTime)),
+      activeCues: List.unmodifiable(activeCues),
+      previousCue: _timeline.latestEndedAt(lookupTime),
       nearbyCues: _timeline.nearby(lookupTime),
     );
   }

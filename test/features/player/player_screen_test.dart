@@ -102,10 +102,40 @@ void main() {
     expect(find.text('Short cue'), findsOneWidget);
 
     controller.seek(const Duration(seconds: 30));
+    await tester.pumpAndSettle();
+
+    expect(controller.state.activeCues, [longCue]);
+    expect(controller.state.previousCue, shortCue);
+    expect(find.text('Long-running cue'), findsOneWidget);
+    expect(find.byKey(const ValueKey('short')), findsOneWidget);
+  });
+
+  testWidgets('animates one previous cue above the next cue', (tester) async {
+    await pumpPlayer(tester);
+
+    controller.seek(const Duration(seconds: 65));
+    await tester.pumpAndSettle();
+
+    expect(controller.state.activeCues, isEmpty);
+    expect(controller.state.previousCue, longCue);
+    expect(find.byKey(const ValueKey('long')), findsOneWidget);
+
+    controller.seek(nextCue.start);
     await tester.pump();
 
-    expect(find.text('Long-running cue'), findsOneWidget);
-    expect(find.text('Short cue'), findsNothing);
+    expect(tester.hasRunningAnimations, isTrue);
+    await tester.pump(const Duration(milliseconds: 275));
+    expect(tester.hasRunningAnimations, isTrue);
+    await tester.pumpAndSettle();
+
+    final previousFinder = find.byKey(const ValueKey('long'));
+    final nextFinder = find.byKey(const ValueKey('next'));
+    expect(previousFinder, findsOneWidget);
+    expect(nextFinder, findsOneWidget);
+    expect(
+      tester.getTopLeft(previousFinder).dy,
+      lessThan(tester.getTopLeft(nextFinder).dy),
+    );
   });
 
   testWidgets('play, rate and delay controls update state', (tester) async {

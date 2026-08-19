@@ -23,10 +23,28 @@ final class SubtitleTimeline {
       }
       _prefixMaxEnd[index] = maxEnd;
     }
+
+    _cuesByEnd = List<SubtitleCue>.of(_cues)
+      ..sort((left, right) {
+        final endComparison = left.end.compareTo(right.end);
+        if (endComparison != 0) {
+          return endComparison;
+        }
+        final startComparison = left.start.compareTo(right.start);
+        if (startComparison != 0) {
+          return startComparison;
+        }
+        final sourceComparison = left.sourceIndex.compareTo(right.sourceIndex);
+        if (sourceComparison != 0) {
+          return sourceComparison;
+        }
+        return left.id.compareTo(right.id);
+      });
   }
 
   final List<SubtitleCue> _cues;
   late final List<Duration> _prefixMaxEnd;
+  late final List<SubtitleCue> _cuesByEnd;
 
   List<SubtitleCue> get cues => List.unmodifiable(_cues);
 
@@ -53,6 +71,19 @@ final class SubtitleTimeline {
     }
 
     return active.reversed.toList(growable: false);
+  }
+
+  SubtitleCue? latestEndedAt(Duration position) {
+    if (position <= Duration.zero || _cuesByEnd.isEmpty) {
+      return null;
+    }
+
+    final endExclusive = _endUpperBound(position);
+    if (endExclusive == 0) {
+      return null;
+    }
+
+    return _cuesByEnd[endExclusive - 1];
   }
 
   SubtitleCue? nextAfter(Duration position) {
@@ -99,6 +130,20 @@ final class SubtitleTimeline {
     while (low < high) {
       final middle = low + ((high - low) >> 1);
       if (_cues[middle].start <= position) {
+        low = middle + 1;
+      } else {
+        high = middle;
+      }
+    }
+    return low;
+  }
+
+  int _endUpperBound(Duration position) {
+    var low = 0;
+    var high = _cuesByEnd.length;
+    while (low < high) {
+      final middle = low + ((high - low) >> 1);
+      if (_cuesByEnd[middle].end <= position) {
         low = middle + 1;
       } else {
         high = middle;

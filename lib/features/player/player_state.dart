@@ -11,6 +11,7 @@ final class PlayerState {
     required this.fontSize,
     required this.oledMode,
     required this.activeCues,
+    required this.previousCue,
     required this.nearbyCues,
   });
 
@@ -23,5 +24,6 @@ final class PlayerState {
   final double fontSize;
   final bool oledMode;
   final List<SubtitleCue> activeCues;
+  final SubtitleCue? previousCue;
   final List<SubtitleCue> nearbyCues;
 }

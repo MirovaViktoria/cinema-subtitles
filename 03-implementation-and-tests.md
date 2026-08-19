@@ -157,6 +157,8 @@ Requirements:
 - white text
 - large subtitle area
 - multiple cues rendered independently
+- one previous cue retained in a distinct opaque color beside new active cues
+- cue changes animated with a subtle cross-fade
 - manual font size adjustment
 - controls hidden/reduced while not needed if useful
 - screen wake lock enabled on player screen
@@ -352,6 +354,30 @@ After parsing, both cues must exist independently.
 Create a fixture containing a long cue and nested shorter cue.
 
 Both timing ranges must remain unchanged after normalization.
+
+### 17. Previous Cue Above New Cue
+
+Given:
+
+```text
+A: 10s -> 15s
+B: 20s -> 25s
+```
+
+Expected:
+
+```text
+9s  => previous null, active []
+16s => previous A in an opaque cool-gray color, active []
+20s => previous A above active [B]
+```
+
+Seeking directly into the gap must produce the same result without depending
+on prior playback history. When B appears, it must cross-fade into the other
+free slot while the already visible A retains the same widget and Y-coordinate.
+A must animate smoothly from white active to opaque cool-gray previous styling without
+moving vertically. The slots alternate for later cues. Overlapping active cues
+must still follow their individual end times and remain independently visible.
 
 ## Widget / Integration Tests
 
